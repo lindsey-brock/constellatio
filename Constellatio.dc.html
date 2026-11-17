@@ -3,8 +3,6 @@
 <head>
 <meta charset="utf-8">
 <title>Constellatio — follow your north star</title>
-<script src="./vendor/react.js"></script>
-<script src="./vendor/react-dom.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -19,15 +17,31 @@ a{color:#EEF1FF}a:hover{color:#F2DFA7}
 .cs-hero{height:860px}
 .cs-copy{align-items:center}
 @media (max-width:859px){
-.cs-hero{height:1000px}
-.cs-copy{align-items:flex-start;padding-top:150px}
+.cs-hero{height:1180px}
+.cs-copy{align-items:flex-start;padding-top:200px !important}
 }
+.cs-step{animation:csStepIn 0.9s cubic-bezier(0.22,1,0.36,1) both}
+@keyframes csStepIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.cs-step{animation:none}}
+button:disabled{opacity:0.4;cursor:not-allowed}
+.cs-opt{background:transparent}
+.cs-opt:hover,.cs-opt:focus-visible{background:rgba(238,241,255,0.08)}
+.cs-opt-sel{color:#F2DFA7 !important;background:rgba(242,223,167,0.12) !important}
+.cs-list{scrollbar-width:thin;scrollbar-color:rgba(238,241,255,0.25) transparent}
+.cs-chip{font:inherit;font-size:14px;color:#EEF1FF;background:transparent;border:1px solid rgba(238,241,255,0.28);border-radius:999px;padding:9px 16px;min-height:44px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s,color .2s}
+.cs-chip:hover{border-color:rgba(238,241,255,0.6)}
+.cs-chip-on,.cs-chip-on:hover{color:#F2DFA7;border-color:#F2DFA7;background:rgba(242,223,167,0.12)}
+#cs-role-search::placeholder,#cs-other::placeholder{color:#8F97C0}
+#cs-biz::placeholder{color:rgba(242,223,167,0.45)}
+#cs-biz:disabled{opacity:0.35}
 </style>
 </helmet>
 <section class="cs-hero" onMouseMove="{{onMove}}" style="position: relative; overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif; color: #EEF1FF; background: radial-gradient(ellipse 60% 30% at 18% 100%, rgba(214,128,86,0.38), rgba(214,128,86,0) 70%), linear-gradient(180deg, #060A1C 0%, #0D1440 38%, #232A6A 66%, #43407E 84%, #5E4A70 100%)">
-<canvas ref="{{canvasRef}}" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; pointer-events: none"></canvas>
+<div aria-hidden="true" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, #050919 0%, #0A1036 55%, #0E1546 100%); opacity: {{nightOp}}; transition: opacity 1.8s ease"></div>
+<canvas ref="{{backRef}}" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; pointer-events: none"></canvas>
 
-<header style="position: absolute; top: 0; left: 0; right: 0; z-index: 2">
+<div aria-hidden="{{heroAria}}" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; visibility: {{heroVis}}">
+<header ref="{{nr}}" style="position: absolute; top: 0; left: 0; right: 0; z-index: 2; opacity: {{op4}}; filter: blur({{bl4}}); transition: opacity 0.9s ease, filter 0.9s ease">
 <nav aria-label="Main" style="max-width: 1200px; margin: 0 auto; padding: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px">
 <a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #EEF1FF">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F2DFA7" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M12 2V22M2 12H22M5.5 5.5L18.5 18.5M18.5 5.5L5.5 18.5" stroke-opacity="0.55"></path><path d="M12 6V18M6 12H18"></path></svg>
@@ -44,38 +58,443 @@ a{color:#EEF1FF}a:hover{color:#F2DFA7}
 
 <div class="cs-copy" style="position: relative; z-index: 1; max-width: 1200px; height: 100%; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex">
 <div style="max-width: 560px; display: flex; flex-direction: column; gap: 28px">
-<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Brand strategy · Identity · Web</p>
-<h1 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(48px, 6.2vw, 92px); line-height: 1; letter-spacing: -0.015em">In a constellation of brands, follow your <em style="font-style: italic; color: {{accent}}">north star.</em></h1>
-<p style="margin: 0; font-size: 19px; line-height: 1.6; color: #D3D8F0; max-width: 480px">Every sky is crowded. Constellatio helps you find the one idea that outshines the rest— then connects the dots into a business strategy to navigate your path.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center">
+<p ref="{{r0}}" style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE; opacity: {{op0}}; filter: blur({{bl0}}); transform: translateY({{ty0}}); transition: opacity 0.9s ease, filter 0.9s ease, transform 0.9s ease">Brand strategy · Identity · Web</p>
+<h1 ref="{{r1}}" style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(48px, 6.2vw, 92px); line-height: 1; letter-spacing: -0.015em; opacity: {{op1}}; filter: blur({{bl1}}); transform: translateY({{ty1}}); transition: opacity 0.9s ease, filter 0.9s ease, transform 0.9s ease">In a constellation of brands, follow your <em style="font-style: italic; color: {{accent}}">north star.</em></h1>
+<p ref="{{r2}}" style="margin: 0; font-size: 19px; line-height: 1.6; color: #D3D8F0; max-width: 480px; opacity: {{op2}}; filter: blur({{bl2}}); transform: translateY({{ty2}}); transition: opacity 0.9s ease, filter 0.9s ease, transform 0.9s ease">Every sky is crowded. Constellatio helps you find the one idea that outshines the rest— then connects the dots into a business strategy to navigate your path.</p>
+<div ref="{{r3}}" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; opacity: {{op3}}; filter: blur({{bl3}}); transform: translateY({{ty3}}); transition: opacity 0.9s ease, filter 0.9s ease, transform 0.9s ease">
 <button type="button" onClick="{{findStar}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 30px; min-height: 52px; background: {{accent}}; color: #0D1440">Find your north star</button>
 <a href="#top" style="font-size: 16px; font-weight: 500; text-decoration: none; padding: 15px 26px; min-height: 52px; box-sizing: border-box; border-radius: 999px; border: 1px solid rgba(238,241,255,0.35); display: inline-flex; align-items: center">See our constellations</a>
 </div>
 </div>
 </div>
+</div>
+
+<div aria-hidden="{{onbAria}}" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; visibility: {{onbVis}}; opacity: {{onbOp}}; transition: opacity 0.9s ease">
+<header>
+<div style="max-width: 1200px; margin: 0 auto; padding: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px">
+<button type="button" onClick="{{goBack}}" style="font: inherit; font-size: 15px; color: #EEF1FF; background: none; border: 1px solid rgba(238,241,255,0.28); border-radius: 999px; padding: 10px 18px 10px 14px; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#EEF1FF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8L10 13"></path></svg>
+Back
+</button>
+<span style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.04em">constellatio</span>
+</div>
+</header>
+
+<section style="flex: 1 1 auto; display: flex">
+<div style="max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 24px 96px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+<div aria-hidden="true" style="width: 100%; height: 150px; position: relative; flex: 0 0 auto">
+<div ref="{{spotRef}}" style="position: absolute; left: 50%; top: 45%; width: 1px; height: 1px"></div>
+</div>
+
+<sc-if value="{{isStep1}}" hint-placeholder-val="{{ true }}">
+<div class="cs-step" style="width: 100%; max-width: 720px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Chart your course</p>
+<div style="width: 100%; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px 16px">
+<span id="cs-role-label" style="font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap">I am {{article}}</span>
+<div onKeyDown="{{onListKey}}" style="position: relative; flex: 1 1 260px; min-width: 0; max-width: 440px; text-align: left">
+<button type="button" id="cs-role" ref="{{selectRef}}" onClick="{{toggleList}}" aria-haspopup="listbox" aria-expanded="{{openStr}}" aria-labelledby="cs-role-label cs-role" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.5; color: {{accent}}; background: transparent; border: none; border-bottom: 1px solid rgba(238,241,255,0.4); border-radius: 0; padding: 0 4px 4px 0; cursor: pointer; text-align: left">
+<span style="min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{roleText}}</span>
+<svg width="22" height="22" viewBox="0 0 28 28" fill="none" stroke="#EEF1FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; transition: transform 0.2s; transform: {{chevRot}}"><path d="M7 11L14 18L21 11"></path></svg>
+</button>
+<sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-label="Close the list" tabindex="-1" onClick="{{closeList}}" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: transparent; border: none; cursor: default; z-index: 4"></button>
+<div style="position: absolute; left: 0; right: 0; top: calc(100% + 10px); z-index: 5; background: #111948; border: 1px solid rgba(238,241,255,0.14); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif; font-style: normal">
+<div style="padding: 12px; border-bottom: 1px solid rgba(238,241,255,0.10)">
+<label for="cs-role-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Search roles</label>
+<input id="cs-role-search" ref="{{searchRef}}" type="text" value="{{q}}" onChange="{{onSearch}}" placeholder="Search roles…" autocomplete="off" style="width: 100%; box-sizing: border-box; font: inherit; font-size: 15px; color: #EEF1FF; background: rgba(238,241,255,0.06); border: 1px solid rgba(238,241,255,0.14); border-radius: 10px; padding: 10px 12px; min-height: 44px">
+</div>
+<div role="listbox" aria-label="Roles" class="cs-list" style="max-height: 300px; overflow-y: auto; padding: 6px">
+<sc-if value="{{noMatch}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 12px 12px 4px; font-size: 14px; line-height: 1.5; color: #B9C0DE">No exact match. Pick Other and tell us in your own words.</p>
+</sc-if>
+<sc-for list="{{groups}}" as="grp" hint-placeholder-count="3">
+<div role="group" aria-label="{{grp.label}}">
+<div aria-hidden="true" style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #8F97C0; padding: 12px 12px 6px">{{grp.label}}</div>
+<sc-for list="{{grp.items}}" as="it" hint-placeholder-count="4">
+<button type="button" role="option" aria-selected="{{it.selStr}}" onClick="{{it.pick}}" class="cs-opt {{it.cls}}" style="display: block; width: 100%; box-sizing: border-box; text-align: left; font: inherit; font-size: 15px; color: #EEF1FF; border: none; border-radius: 8px; padding: 11px 12px; min-height: 44px; cursor: pointer">{{it.label}}</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D3D8F0; max-width: 460px">Every constellation begins with a single point of light. Choose the one closest to you.</p>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+<button type="button" disabled="{{noRole}}" onClick="{{next}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 32px; min-height: 52px; background: {{accent}}; color: #0D1440">Continue</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStep2}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 760px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Name your star</p>
+<div style="width: 100%; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px 16px">
+<label for="cs-biz" style="font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap">My business is called</label>
+<input id="cs-biz" ref="{{bizRef}}" type="text" value="{{biz}}" onChange="{{onBiz}}" disabled="{{noName}}" placeholder="its name" autocomplete="organization" style="flex: 1 1 240px; min-width: 0; max-width: 380px; box-sizing: border-box; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.5; color: {{accent}}; background: transparent; border: none; border-bottom: 1px solid rgba(238,241,255,0.4); border-radius: 0; padding: 0 0 4px; outline-offset: 6px">
+</div>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D3D8F0; max-width: 460px">Write it the way you'd want to see it written across the sky.</p>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 19px; line-height: 1.5; color: {{accent}}">Still searching for it? Every star was unnamed once.</p>
+<label style="display: inline-flex; align-items: center; gap: 12px; font-size: 15px; color: #EEF1FF; cursor: pointer; min-height: 44px">
+<input type="checkbox" checked="{{noName}}" onChange="{{toggleNoName}}" style="width: 20px; height: 20px; margin: 0; accent-color: {{accent}}; cursor: pointer">
+I don't have a name yet. Help me find one.
+</label>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+<button type="button" disabled="{{bizNotReady}}" onClick="{{next2}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 32px; min-height: 52px; background: {{accent}}; color: #0D1440">Continue</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStep3}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 860px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; margin-top: 16px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Connect the dots</p>
+<h2 id="cs-goals-label" style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.15; letter-spacing: -0.01em">I'm navigating toward<em style="font-style: italic; color: {{accent}}">…</em></h2>
+<div role="group" aria-labelledby="cs-goals-label" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 860px">
+<sc-for list="{{goalItems}}" as="g" hint-placeholder-count="10">
+<button type="button" aria-pressed="{{g.pressed}}" onClick="{{g.toggle}}" class="cs-chip {{g.cls}}">
+<sc-if value="{{g.on}}" hint-placeholder-val="{{ false }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3V21M3 12H21"></path><path d="M6.5 6.5L17.5 17.5M17.5 6.5L6.5 17.5" stroke-opacity="0.5"></path></svg>
+</sc-if>
+{{g.label}}
+</button>
+</sc-for>
+</div>
+<sc-if value="{{otherOn}}" hint-placeholder-val="{{ false }}">
+<div style="width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+<label for="cs-other" style="font-size: 14px; color: #B9C0DE">Tell us about it</label>
+<input id="cs-other" type="text" value="{{goalOther}}" onChange="{{onGoalOther}}" placeholder="A few words are plenty" style="font: inherit; font-size: 16px; color: #EEF1FF; background: rgba(238,241,255,0.06); border: 1px solid rgba(238,241,255,0.18); border-radius: 12px; padding: 12px 14px; min-height: 48px; box-sizing: border-box; width: 100%">
+</div>
+</sc-if>
+<p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; line-height: 1.5; color: {{accent}}">Choose as many as you like. Every star adds to the shape.</p>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+<button type="button" disabled="{{goalsNotReady}}" onClick="{{next3}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 32px; min-height: 52px; background: {{accent}}; color: #0D1440">Continue</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isPackage}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 760px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; margin-top: 16px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Your constellation</p>
+<h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(34px, 3.4vw, 48px); line-height: 1.15; letter-spacing: -0.01em">Here's the shape of it{{forName}}<em style="font-style: italic; color: {{accent}}">.</em></h2>
+<div style="width: 100%; max-width: 640px; box-sizing: border-box; text-align: left; background: rgba(17,25,72,0.85); border: 1px solid rgba(238,241,255,0.12); border-radius: 20px; padding: 18px 26px 20px">
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); column-gap: 28px">
+<sc-for list="{{pkgItems}}" as="p" hint-placeholder-count="3">
+<li style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(238,241,255,0.08); font-size: 15px; color: #EEF1FF"><span>{{p.label}}</span><span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; white-space: nowrap">{{p.price}}</span></li>
+</sc-for>
+</ul>
+<sc-if value="{{hasDiscount}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; color: {{accent}}"><span>Constellation saving, 10% for three or more</span><span style="white-space: nowrap">−{{discount}}</span></div>
+</sc-if>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 12px; margin-top: 12px; border-top: 1px solid rgba(238,241,255,0.2)"><span style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #B9C0DE">Starting from</span><span style="font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 40px; line-height: 1.05; color: {{accent}}">{{total}}</span></div>
+<p style="margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: #8F97C0">Final pricing is confirmed after a short kickoff call. Taxes not included.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 20px">
+<button type="button" onClick="{{plantWish}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 32px; min-height: 52px; background: {{accent}}; color: #0D1440">Set the course</button>
+<button type="button" onClick="{{talkFirst}}" style="font: inherit; font-size: 15px; color: #EEF1FF; background: none; border: none; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; min-height: 44px; padding: 0 6px">I'd rather chart it together first</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isPlanted}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 640px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; margin-top: 16px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Course set</p>
+<h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.15; letter-spacing: -0.01em">You're on your way<em style="font-style: italic; color: {{accent}}">.</em></h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D3D8F0; max-width: 480px">We'll be in touch within [RESPONSE TIME] to map out the first leg of the journey.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{isCall}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 760px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-top: 16px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Let's plot it together</p>
+<h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(34px, 3.4vw, 48px); line-height: 1.15; letter-spacing: -0.01em">Some courses are best charted together<em style="font-style: italic; color: {{accent}}">.</em></h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #D3D8F0; max-width: 520px">Book a free 30-minute discovery call and we'll map out a constellation around exactly what you need.</p>
+<sc-if value="{{hasOtherText}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; line-height: 1.5; color: {{accent}}; max-width: 520px">“{{goalOther}}”</p>
+</sc-if>
+<div role="group" aria-label="Choose a day" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px">
+<sc-for list="{{dayItems}}" as="d" hint-placeholder-count="5">
+<button type="button" aria-pressed="{{d.pressed}}" onClick="{{d.pick}}" class="cs-chip {{d.cls}}">{{d.label}}</button>
+</sc-for>
+</div>
+<div role="group" aria-label="Choose a time" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px">
+<sc-for list="{{timeItems}}" as="tm" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{tm.pressed}}" onClick="{{tm.pick}}" class="cs-chip {{tm.cls}}">{{tm.label}}</button>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 13px; color: #8F97C0">Times are shown in your time zone.</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 20px">
+<button type="button" disabled="{{cantBook}}" onClick="{{bookCall}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 32px; min-height: 52px; background: {{accent}}; color: #0D1440">Book my call</button>
+<sc-if value="{{canSeePackage}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{backToPackage}}" style="font: inherit; font-size: 15px; color: #EEF1FF; background: none; border: none; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; min-height: 44px; padding: 0 6px">Back to my constellation</button>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isBooked}}" hint-placeholder-val="{{ false }}">
+<div class="cs-step" style="width: 100%; max-width: 640px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; margin-top: 16px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">See you under the same sky</p>
+<h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(34px, 3.4vw, 48px); line-height: 1.2; letter-spacing: -0.01em">You're booked for <em style="font-style: italic; color: {{accent}}">{{bookedWhen}}</em>.</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D3D8F0; max-width: 480px">A calendar invite is on its way. Bring your questions. We'll bring the star charts.</p>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 32px; font-size: 14px; color: #B9C0DE">
+<span>Step {{stepNum}} of 4</span>
+<div role="progressbar" aria-label="Onboarding progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="{{stepNum}}" style="width: 240px; height: 3px; border-radius: 3px; background: rgba(238,241,255,0.16); overflow: hidden">
+<div style="width: {{progW}}; height: 100%; background: {{accent}}; transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1)"></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<canvas ref="{{fxRef}}" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 6"></canvas>
 </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F2DFA7","options":["#F2DFA7","#CFE0FF","#F4B98A","#FFFFFF"]},"$preview":{"width":1440,"height":860}}'>
 class Component extends DCLogic {
   renderVals() {
+    var s = this.state || {};
     var self = this;
     if (!this._ref) {
+      this.textEls = [];
       this._ref = function (el) {
         if (el && el !== self.cv) { self._stop(); self._start(el); }
         else if (!el) { self._stop(); self.cv = null; }
       };
-      this._find = function () { self._flare(); };
+      this._fxRef = function (el) { self.fx = el; if (el) { self.fctx = el.getContext('2d'); if (self.cv) self._resize(); } };
+      this._tr = [0, 1, 2, 3, 4].map(function (i) { return function (el) { self.textEls[i] = el; }; });
+      this._spotRef = function (el) { self.spot = el; };
+      this._find = function () { self._launch(); };
       this._move = function (e) {
         var r = e.currentTarget.getBoundingClientRect();
         if (!r.width) return;
         self.mx = (e.clientX - r.left) / r.width - 0.5;
         self.my = (e.clientY - r.top) / r.height - 0.5;
       };
+      // onboarding
+      this._selRef = function (el) { self.sel = el; };
+      this._searchRef = function (el) { self.searchEl = el; };
+      this._bizRef = function (el) { self.bizEl = el; };
+      this._toggleList = function () {
+        var open = !(self.state && self.state.open);
+        self.setState({ open: open, q: '' });
+        if (open) setTimeout(function () { if (self.searchEl) { try { self.searchEl.focus({ preventScroll: true }); } catch (e) {} } }, 40);
+      };
+      this._closeList = function () { self.setState({ open: false }); };
+      this._onSearch = function (e) { self.setState({ q: e.target.value }); };
+      this._onListKey = function (e) {
+        if (e.key === 'Escape' && self.state && self.state.open) {
+          self.setState({ open: false });
+          if (self.sel) { try { self.sel.focus({ preventScroll: true }); } catch (err) {} }
+        }
+      };
+      this._choose = function (title) {
+        self.setState({ role: title, open: false, q: '' });
+        if (self.sel) { try { self.sel.focus({ preventScroll: true }); } catch (err) {} }
+      };
+      this._back = function () {
+        var st = (self.state && self.state.step) || 1;
+        if (st > 1) { self.setState({ step: st - 1, talk: false, planted: false, booked: false }); return; }
+        self._goHome();
+      };
+      this._next = function () {
+        self.setState({ step: 2 });
+        setTimeout(function () { if (self.bizEl && !(self.state && self.state.noName)) { try { self.bizEl.focus({ preventScroll: true }); } catch (e) {} } }, 80);
+      };
+      this._onBiz = function (e) { self.setState({ biz: e.target.value }); };
+      this._toggleNoName = function (e) { self.setState({ noName: e.target.checked }); };
+      this._next2 = function () {
+        var st = self.state || {}, goals = (st.goals || []).slice();
+        if (st.noName && goals.indexOf('name') === -1) goals.push('name');
+        self.setState({ step: 3, goals: goals });
+      };
+      this._toggleGoal = function (id) {
+        var goals = ((self.state && self.state.goals) || []).slice(), i = goals.indexOf(id);
+        if (i === -1) goals.push(id); else goals.splice(i, 1);
+        self.setState({ goals: goals });
+      };
+      this._onGoalOther = function (e) { self.setState({ goalOther: e.target.value }); };
+      this._next3 = function () { self.setState({ step: 4, talk: false, planted: false, booked: false }); };
+      this._plantWish = function () { self.setState({ planted: true }); };
+      this._talkFirst = function () { self.setState({ talk: true }); };
+      this._backToPackage = function () { self.setState({ talk: false }); };
+      this._bookCall = function () { self.setState({ booked: true }); };
+      this._pickDay = function (d) { self.setState({ callDay: d }); };
+      this._pickTime = function (t) { self.setState({ callTime: t }); };
     }
-    return { accent: this.props.accent ?? '#F2DFA7', canvasRef: this._ref, findStar: this._find, onMove: this._move };
+    var dis = s.dis || [false, false, false, false, false];
+    var role = s.role || '';
+    var q = (s.q || '').trim().toLowerCase();
+    var groups = [];
+    this._roles().forEach(function (g) {
+      var items = g[1].filter(function (title) { return g[0] === 'Something else' || !q || title.toLowerCase().indexOf(q) !== -1 || g[0].toLowerCase().indexOf(q) !== -1; })
+        .map(function (title) {
+          return { label: title, pick: function () { self._choose(title); }, selStr: title === role ? 'true' : 'false', cls: title === role ? 'cs-opt-sel' : '' };
+        });
+      if (items.length) groups.push({ label: g[0], items: items });
+    });
+    var pk = this._package(s);
+    var v = {
+      accent: this.props.accent ?? '#F2DFA7',
+      backRef: this._ref,
+      fxRef: this._fxRef,
+      r0: this._tr[0], r1: this._tr[1], r2: this._tr[2], r3: this._tr[3], nr: this._tr[4],
+      spotRef: this._spotRef,
+      findStar: this._find,
+      onMove: this._move,
+      nightOp: s.night ? '1' : '0',
+      heroVis: s.heroGone ? 'hidden' : 'visible',
+      heroAria: s.onbOn ? 'true' : 'false',
+      onbVis: s.onbOn ? 'visible' : 'hidden',
+      onbOp: s.onbOn ? '1' : '0',
+      onbAria: s.onbOn ? 'false' : 'true',
+      goBack: this._back,
+      selectRef: this._selRef,
+      searchRef: this._searchRef,
+      toggleList: this._toggleList,
+      closeList: this._closeList,
+      onSearch: this._onSearch,
+      onListKey: this._onListKey,
+      open: !!s.open,
+      openStr: s.open ? 'true' : 'false',
+      chevRot: s.open ? 'rotate(180deg)' : 'rotate(0deg)',
+      roleText: role || 'choose what you do',
+      q: s.q || '',
+      groups: groups,
+      noMatch: !!q && groups.length === 1,
+      article: /^[aeiou]/i.test(role) ? 'an' : 'a',
+      noRole: !role,
+      next: this._next,
+      isStep1: (s.step || 1) === 1,
+      isStep2: s.step === 2,
+      isStep3: s.step === 3,
+      stepNum: s.step || 1,
+      progW: (s.step || 1) * 25 + '%',
+      bizRef: this._bizRef,
+      biz: s.biz || '',
+      onBiz: this._onBiz,
+      noName: !!s.noName,
+      toggleNoName: this._toggleNoName,
+      bizNotReady: !s.noName && !(s.biz || '').trim(),
+      next2: this._next2,
+      goalItems: this._goals().map(function (g) {
+        var on = (s.goals || []).indexOf(g[0]) !== -1;
+        return { label: g[1], on: on, pressed: on ? 'true' : 'false', cls: on ? 'cs-chip-on' : '', toggle: function () { self._toggleGoal(g[0]); } };
+      }),
+      otherOn: (s.goals || []).indexOf('other') !== -1,
+      goalOther: s.goalOther || '',
+      onGoalOther: this._onGoalOther,
+      goalsNotReady: !(s.goals || []).length,
+      next3: this._next3,
+      isPackage: pk.step4 && !pk.needCall && !s.planted,
+      isPlanted: pk.step4 && !pk.needCall && !!s.planted,
+      isCall: pk.step4 && pk.needCall && !s.booked,
+      isBooked: pk.step4 && pk.needCall && !!s.booked,
+      forName: (s.biz || '').trim() && !s.noName ? ', ' + s.biz.trim() : '',
+      pkgItems: pk.items,
+      hasDiscount: pk.discount > 0,
+      discount: pk.fmt(pk.discount),
+      total: pk.fmt(pk.total),
+      plantWish: this._plantWish,
+      talkFirst: this._talkFirst,
+      backToPackage: this._backToPackage,
+      canSeePackage: !pk.hasOther,
+      hasOtherText: pk.hasOther && !!(s.goalOther || '').trim(),
+      dayItems: pk.days.map(function (d) { var on = s.callDay === d; return { label: d, pressed: on ? 'true' : 'false', cls: on ? 'cs-chip-on' : '', pick: function () { self._pickDay(d); } }; }),
+      timeItems: ['09:30', '11:00', '14:30', '16:00'].map(function (t) { var on = s.callTime === t; return { label: t, pressed: on ? 'true' : 'false', cls: on ? 'cs-chip-on' : '', pick: function () { self._pickTime(t); } }; }),
+      cantBook: !(s.callDay && s.callTime),
+      bookCall: this._bookCall,
+      bookedWhen: (s.callDay || '') + ' at ' + (s.callTime || '')
+    };
+    for (var i = 0; i < 5; i++) {
+      v['op' + i] = dis[i] ? '0' : '1';
+      v['bl' + i] = dis[i] ? '10px' : '0px';
+      v['ty' + i] = dis[i] ? '-10px' : '0px';
+    }
+    return v;
   }
 
-  componentWillUnmount() { this._stop(); this.cv = null; }
+  // ---- content: roles, wishes and starting prices (US dollars) ----
+  _roles() {
+    return [
+      ['Food & hospitality', ['Restaurant owner', 'Café owner', 'Baker', 'Chef', 'Caterer', 'Hotelier', 'B&B host', 'Winemaker', 'Brewer']],
+      ['Retail & e-commerce', ['Shop owner', 'Online store owner', 'Boutique owner', 'Florist', 'Jewellery designer', 'Fashion designer']],
+      ['Health & wellness', ['Therapist', 'Physiotherapist', 'Dentist', 'Doctor in private practice', 'Midwife', 'Nutritionist', 'Yoga teacher', 'Personal trainer']],
+      ['Beauty', ['Hair stylist', 'Makeup artist', 'Nail technician', 'Esthetician', 'Spa owner']],
+      ['Creative', ['Photographer', 'Illustrator', 'Artist', 'Graphic designer', 'Musician', 'Writer', 'Filmmaker']],
+      ['Professional services', ['Lawyer', 'Accountant', 'Consultant', 'Architect', 'Financial advisor', 'Real estate agent', 'Translator']],
+      ['Trades & home', ['Electrician', 'Plumber', 'Builder', 'Carpenter', 'Interior designer', 'Landscaper', 'Cleaning business owner']],
+      ['Education & coaching', ['Tutor', 'Coach', 'Course creator', 'Language teacher', 'Childcare provider']],
+      ['Tech & startups', ['Startup founder', 'Software developer', 'IT consultant', 'App maker']],
+      ['Land & makers', ['Farmer', 'Artisan', 'Ceramicist', 'Woodworker', 'Beekeeper']],
+      ['Community & events', ['Nonprofit director', 'Community organiser', 'Event planner', 'Wedding planner']],
+      ['Something else', ['Other — I\'ll describe it']]
+    ];
+  }
+
+  _goals() {
+    return [
+      ['strategy', 'A clear brand strategy'],
+      ['name', 'A name that stands out'],
+      ['identity', 'A logo & visual identity'],
+      ['website', 'A website that guides customers in'],
+      ['shop', 'An online shop'],
+      ['bookings', 'Online bookings'],
+      ['rebrand', 'A fresh new look'],
+      ['social', 'Social media that looks the part'],
+      ['print', 'Print & packaging'],
+      ['other', 'Something else']
+    ];
+  }
+
+  _prices() {
+    return {
+      strategy: ['Brand strategy & positioning', 2500],
+      name: ['Naming', 1500],
+      identity: ['Logo & visual identity', 3500],
+      website: ['Website design & build', 7000],
+      shop: ['Online shop', 5000],
+      bookings: ['Online bookings', 3500],
+      rebrand: ['Brand refresh', 3500],
+      social: ['Social media kit', 1000],
+      print: ['Print & packaging design', 3500]
+    };
+  }
+
+  _package(s) {
+    var prices = this._prices(), goals = s.goals || [];
+    var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    var order = ['strategy', 'name', 'identity', 'website', 'shop', 'bookings', 'rebrand', 'social', 'print'];
+    var items = [], sub = 0;
+    order.forEach(function (id) {
+      if (goals.indexOf(id) !== -1) { items.push({ label: prices[id][0], price: fmt(prices[id][1]) }); sub += prices[id][1]; }
+    });
+    var discount = items.length >= 3 ? Math.round(sub * 0.1 / 50) * 50 : 0;
+    var hasOther = goals.indexOf('other') !== -1;
+    var days = [], d = new Date();
+    while (days.length < 5) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) days.push(d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }));
+    }
+    return { step4: s.step === 4, items: items, discount: discount, total: sub - discount, fmt: fmt, hasOther: hasOther, needCall: hasOther || !!s.talk, days: days };
+  }
+
+  // ---- lifecycle ----
+  componentWillUnmount() {
+    this._stop();
+    this.cv = null;
+    (this._timers || []).forEach(function (id) { clearTimeout(id); });
+  }
+
+  _later(fn, ms) {
+    if (!this._timers) this._timers = [];
+    this._timers.push(setTimeout(fn, ms));
+  }
 
   _stop() {
     if (this.raf) cancelAnimationFrame(this.raf);
@@ -104,12 +523,19 @@ class Component extends DCLogic {
     this.ctx = el.getContext('2d');
     this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     this.t0 = performance.now();
+    this.last = this.t0;
     this.mx = this.my = 0;
     this.px = this.py = 0;
     this.meteors = [];
+    this.dust = [];
+    this.trail = [];
     this.nextMeteor = 6000;
     this.flareAt = -1e9;
-    if (!this.spr) this.spr = { w: this._sprite(255, 255, 255), b: this._sprite(196, 212, 255), k: this._sprite(255, 214, 170) };
+    this.K = 0; this.Ktarget = 0;
+    this.launched = false;
+    this.fly = null;
+    this.rest = null;
+    if (!this.spr) this.spr = { w: this._sprite(255, 255, 255), b: this._sprite(196, 212, 255), k: this._sprite(255, 214, 170), g: this._sprite(242, 223, 167) };
     if (!this.seed) {
       this.seed = [];
       for (var i = 0; i < 12; i++) this.seed.push(Math.random() * 6.283);
@@ -134,13 +560,13 @@ class Component extends DCLogic {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     el.width = Math.round(W * dpr);
     el.height = Math.round(H * dpr);
+    if (this.fx) { this.fx.width = el.width; this.fx.height = el.height; }
     this.W = W; this.H = H; this.dpr = dpr;
     var mob = W < 860;
     this.mob = mob;
-    var hz = H * (mob ? 0.88 : 0.8);
+    var hz = H * (mob ? 0.9 : 0.8);
     this.hz = hz;
 
-    // star field: a scatter plus a faint milky band
     var N = Math.min(2400, Math.round(W * H / 800));
     var stars = [];
     for (var i = 0; i < N; i++) {
@@ -168,15 +594,13 @@ class Component extends DCLogic {
         z: 0.25 + m * 0.75
       });
     }
-    this.stars = stars;
 
-    // constellations
     var ori = [[0.15, 0.12, 'k', 1], [0.62, 0.2, 'b', 0.8], [0.4, 0, 'b', 0.6], [0.36, 0.52, 'b', 0.75], [0.43, 0.48, 'b', 0.8], [0.5, 0.44, 'b', 0.72], [0.28, 0.88, 'b', 0.7], [0.7, 0.82, 'b', 1], [0.84, 0.06, 'w', 0.5], [0.88, 0.18, 'w', 0.55], [0.87, 0.31, 'w', 0.5]];
     var oriL = [[2, 0], [2, 1], [0, 3], [1, 5], [3, 4], [4, 5], [3, 6], [5, 7], [1, 9], [8, 9], [9, 10]];
     var umi = [[0, 0, 'w', 1], [0.12, 0.18, 'w', 0.5], [0.2, 0.36, 'w', 0.5], [0.24, 0.55, 'w', 0.55], [0.4, 0.62, 'w', 0.5], [0.46, 0.82, 'w', 0.7], [0.3, 0.78, 'k', 0.85]];
     var umiL = [[6, 5], [5, 4], [4, 3], [3, 6], [3, 2], [2, 1]];
     var oo, os, po, ps;
-    if (mob) { oo = [0.1 * W, 0.58 * H]; os = Math.min(0.26 * H, 0.62 * W); po = [0.86 * W, 0.54 * H]; ps = 0.16 * H; }
+    if (mob) { oo = [0.1 * W, 0.64 * H]; os = Math.min(0.17 * H, 0.6 * W); po = [0.86 * W, 0.62 * H]; ps = 0.13 * H; }
     else { oo = [0.53 * W, 0.33 * H]; os = Math.min(0.46 * H, 0.26 * W); po = [0.86 * W, 0.15 * H]; ps = 0.3 * H; }
     this.ori = ori.map(function (s) { return { x: oo[0] + s[0] * os * 0.85, y: oo[1] + s[1] * os, c: s[2], m: s[3] }; });
     this.umi = umi.map(function (s) { return { x: po[0] - s[0] * ps, y: po[1] + s[1] * ps, c: s[2], m: s[3] }; });
@@ -185,35 +609,198 @@ class Component extends DCLogic {
     this.oriLabel = [oo[0] - 6, oo[1] - 22];
     this.umiLabel = [po[0] - 0.46 * ps, po[1] + 0.82 * ps + 30];
 
-    // timeline
     var segStep = 260, segDur = 420;
     this.tOri = 2000;
     this.tUmi = this.tOri + oriL.length * segStep + segDur + 300;
     this.tPol = this.tUmi + umiL.length * segStep + segDur + 600;
     this.segStep = segStep; this.segDur = segDur;
 
-    // mountain ridges
-    var sd = this.seed, back = [], front = [], lights = [];
+    var sd = this.seed, back = [], front = [];
     for (var X = -8; X <= W + 16; X += 8) {
-      var q = X / W;
-      back.push([X, hz - H * 0.035 - H * 0.05 * (0.5 + 0.5 * Math.sin(q * 5.1 + sd[0])) - H * 0.025 * Math.sin(q * 13.7 + sd[1]) - H * 0.01 * Math.sin(q * 31 + sd[2])]);
-      front.push([X, hz + H * 0.025 - H * 0.04 * (0.5 + 0.5 * Math.sin(q * 3.3 + sd[3])) - H * 0.018 * Math.sin(q * 17.9 + sd[4]) - H * 0.007 * Math.sin(q * 47 + sd[5])]);
+      var qx = X / W;
+      back.push([X, hz - H * 0.035 - H * 0.05 * (0.5 + 0.5 * Math.sin(qx * 5.1 + sd[0])) - H * 0.025 * Math.sin(qx * 13.7 + sd[1]) - H * 0.01 * Math.sin(qx * 31 + sd[2])]);
+      front.push([X, hz + H * 0.025 - H * 0.04 * (0.5 + 0.5 * Math.sin(qx * 3.3 + sd[3])) - H * 0.018 * Math.sin(qx * 17.9 + sd[4]) - H * 0.007 * Math.sin(qx * 47 + sd[5])]);
     }
-    for (var L = 0; L < 14; L++) {
-      var fx = (0.15 + Math.random() * 0.8) * W;
-      var idx = Math.max(0, Math.min(front.length - 1, Math.round((fx + 8) / 8)));
-      lights.push({ x: fx, y: front[idx][1] + 6 + Math.random() * H * 0.05, ph: Math.random() * 6.283 });
-    }
-    this.back = back; this.front = front; this.lights = lights;
+    this.back = back; this.front = front;
+    // stars live only in the sky: drop any that would sit on or behind the hills
+    this.stars = stars.filter(function (s) {
+      var bi = Math.max(0, Math.min(back.length - 1, Math.round((s.x + 8) / 8)));
+      return s.y + s.d * 0.5 + 14 < back[bi][1];
+    });
+    if (this.launched && !this.fly) this.rest = this._spotPos();
   }
 
-  _flare() {
-    if (!this.cv) return;
-    var t = performance.now() - this.t0;
-    if (t < this.tPol) { this.t0 -= (this.tPol - t); t = this.tPol; }
+  // ---- geometry helpers (canvas coordinates) ----
+  _toCanvas(r) {
+    var cr = this.cv.getBoundingClientRect(), k = cr.width ? this.cv.clientWidth / cr.width : 1;
+    return { x: (r.left - cr.left) * k, y: (r.top - cr.top) * k, w: r.width * k, h: r.height * k };
+  }
+
+  _spotPos() {
+    if (!this.spot || !this.cv) return [this.W * 0.5, this.H * 0.25];
+    var r = this._toCanvas(this.spot.getBoundingClientRect());
+    return [r.x, r.y];
+  }
+
+  _lineRects(el) {
+    var out = [];
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var rs = range.getClientRects();
+      for (var i = 0; i < rs.length; i++) if (rs[i].width > 2 && rs[i].height > 2) out.push(this._toCanvas(rs[i]));
+    } catch (e) {}
+    if (!out.length) out.push(this._toCanvas(el.getBoundingClientRect()));
+    return out;
+  }
+
+  // a smooth path through the given points, sampled for constant speed
+  _path(pts) {
+    var samp = [], n = pts.length;
+    var P = function (i) { return pts[Math.max(0, Math.min(n - 1, i))]; };
+    for (var i = 0; i < n - 1; i++) {
+      var p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      for (var k = 0; k < 40; k++) {
+        var t = k / 40, t2 = t * t, t3 = t2 * t;
+        samp.push([
+          0.5 * ((2 * p1[0]) + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+          0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3)
+        ]);
+      }
+    }
+    samp.push(pts[n - 1]);
+    var len = [0];
+    for (var j = 1; j < samp.length; j++) len.push(len[j - 1] + Math.hypot(samp[j][0] - samp[j - 1][0], samp[j][1] - samp[j - 1][1]));
+    return { s: samp, len: len, L: len[len.length - 1] };
+  }
+
+  _at(path, f) {
+    var d = f * path.L, len = path.len, lo = 0, hi = len.length - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (len[mid] < d) lo = mid; else hi = mid; }
+    var a = path.s[lo], b = path.s[hi], seg = (len[hi] - len[lo]) || 1, u = (d - len[lo]) / seg;
+    return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
+  }
+
+  // ---- the transition ----
+  _launch() {
+    if (this.launched || !this.cv) return;
+    var self = this, t = performance.now() - this.t0;
+    if (t < this.tPol + 600) { this.t0 -= (this.tPol + 600 - t); t = this.tPol + 600; }
+    this.launched = true;
     this.flareAt = t;
-    var p = this.umi[0];
-    this._meteor(p.x + 380, p.y - 140, p.x + 30, p.y - 10);
+    var W = this.W, H = this.H, P = this.umi[0];
+    var start = [P.x + this.px, P.y + this.py];
+    var rest = this._spotPos();
+    var R = function (i) { var el = self.textEls[i]; return el ? self._toCanvas(el.getBoundingClientRect()) : null; };
+    var e = R(0), h = R(1), p = R(2), c = R(3);
+    var pts = [start];
+    // swirl: two tightening loops around the hero text, then rise to rest
+    var bx0 = W * 0.1, by0 = H * 0.25, bx1 = W * 0.45, by1 = H * 0.75;
+    if (e && h && p && c) {
+      bx0 = Math.min(e.x, h.x, p.x, c.x); by0 = Math.min(e.y, h.y, p.y, c.y);
+      bx1 = Math.max(e.x + e.w, h.x + h.w, p.x + p.w, c.x + c.w); by1 = Math.max(e.y + e.h, h.y + h.h, p.y + p.h, c.y + c.h);
+    }
+    var C = [(bx0 + bx1) / 2, (by0 + by1) / 2];
+    var rx = (bx1 - bx0) * 0.58 + 30, ry = (by1 - by0) * 0.58 + 24;
+    var a0 = Math.atan2((start[1] - C[1]) / ry, (start[0] - C[0]) / rx);
+    var steps = 30, turns = 2;
+    for (var k = 1; k <= steps; k++) {
+      var f = k / steps, ang = a0 - f * turns * Math.PI * 2, rf = 1.02 - 0.72 * f;
+      pts.push([C[0] + Math.cos(ang) * rx * rf, C[1] + Math.sin(ang) * ry * rf]);
+    }
+    pts.push([(C[0] + rest[0]) / 2, Math.min(C[1], rest[1]) + (Math.abs(C[1] - rest[1]) * 0.15) - H * 0.04]);
+    pts.push(rest);
+    var dur = this.reduced ? 1 : 4400;
+    this.fly = { path: this._path(pts), t0: t + 350, dur: dur, home: false };
+    this.rest = rest;
+    this.trail = [];
+    this._later(function () { self.Ktarget = 1; self.setState({ night: true }); }, 350);
+  }
+
+  _arrive() {
+    var self = this;
+    this.fly = null;
+    this._dissolve(4);
+    for (var i = 0; i < 4; i++) this._dissolve(i);
+    this.setState({ onbOn: true, step: 1 });
+    this._later(function () {
+      self.setState({ heroGone: true });
+      if (self.sel) { try { self.sel.focus({ preventScroll: true }); } catch (e) {} }
+    }, 900);
+  }
+
+  _goHome() {
+    if (!this.launched || this.fly) return;
+    var self = this, t = performance.now() - this.t0;
+    var P = this.umi[0], rest = this.rest || this._spotPos();
+    this.setState({ onbOn: false, heroGone: false, open: false });
+    this.Ktarget = 0;
+    this._later(function () { self.setState({ night: false, dis: [false, false, false, false, false] }); }, 250);
+    this.fly = {
+      path: this._path([rest, [rest[0] + this.W * 0.14, rest[1] - this.H * 0.04], [P.x, P.y]]),
+      t0: t + 200, dur: this.reduced ? 1 : 1600, home: true
+    };
+  }
+
+  _dissolve(i) {
+    var dis = ((this.state && this.state.dis) || [false, false, false, false, false]).slice();
+    if (dis[i]) return;
+    dis[i] = true;
+    this.setState({ dis: dis });
+    var el = this.textEls[i];
+    if (!el || this.reduced) return;
+    var rects = this._lineRects(el), area = 0;
+    rects.forEach(function (r) { area += r.w * r.h; });
+    var count = Math.min(i === 4 ? 160 : 520, Math.max(40, Math.round(area / 70)));
+    var gold = i === 1 ? 0.25 : 0.08;
+    for (var n = 0; n < count; n++) {
+      var r = rects[Math.floor(Math.random() * rects.length)];
+      var x = r.x + Math.random() * r.w, y = r.y + r.h * (0.2 + Math.random() * 0.65);
+      this.dust.push({
+        x: x, y: y,
+        vx: (Math.random() - 0.3) * 60, vy: -15 - Math.random() * 55,
+        age: 0, life: 1.1 + Math.random() * 1.8,
+        size: 0.6 + Math.pow(Math.random(), 3) * 2.6,
+        c: Math.random() < gold ? 'g' : (Math.random() < 0.5 ? 'w' : 'b'),
+        ph: Math.random() * 6.28
+      });
+    }
+  }
+
+  _drawStar(ctx, x, y, b) {
+    var spr = this.spr;
+    var halo = 70 + 60 * b;
+    var hg = ctx.createRadialGradient(x, y, 0, x, y, halo);
+    hg.addColorStop(0, 'rgba(255,244,214,' + Math.min(0.5, 0.22 * b) + ')');
+    hg.addColorStop(1, 'rgba(255,244,214,0)');
+    ctx.fillStyle = hg;
+    ctx.fillRect(x - halo, y - halo, halo * 2, halo * 2);
+    var core = 22 + 18 * b;
+    ctx.globalAlpha = Math.min(1, 0.6 + 0.4 * b);
+    ctx.drawImage(spr.w, x - core / 2, y - core / 2, core, core);
+    ctx.drawImage(spr.w, x - core / 4, y - core / 4, core / 2, core / 2);
+    var spike = 34 + 46 * b, thin = 0.9 + 0.5 * b;
+    ctx.globalAlpha = Math.min(1, 0.35 + 0.4 * b);
+    var sg = ctx.createLinearGradient(x - spike, 0, x + spike, 0);
+    sg.addColorStop(0, 'rgba(255,248,230,0)'); sg.addColorStop(0.5, 'rgba(255,248,230,1)'); sg.addColorStop(1, 'rgba(255,248,230,0)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(x - spike, y - thin / 2, spike * 2, thin);
+    var vg = ctx.createLinearGradient(0, y - spike, 0, y + spike);
+    vg.addColorStop(0, 'rgba(255,248,230,0)'); vg.addColorStop(0.5, 'rgba(255,248,230,1)'); vg.addColorStop(1, 'rgba(255,248,230,0)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(x - thin / 2, y - spike, thin, spike * 2);
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(Math.PI / 4);
+    ctx.globalAlpha = Math.min(1, 0.18 + 0.22 * b);
+    var s2 = spike * 0.45;
+    var dg = ctx.createLinearGradient(-s2, 0, s2, 0);
+    dg.addColorStop(0, 'rgba(255,248,230,0)'); dg.addColorStop(0.5, 'rgba(255,248,230,1)'); dg.addColorStop(1, 'rgba(255,248,230,0)');
+    ctx.fillStyle = dg;
+    ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
+    ctx.restore();
+    ctx.globalAlpha = 1;
   }
 
   _meteor(x0, y0, x1, y1) {
@@ -225,26 +812,30 @@ class Component extends DCLogic {
     var ctx = this.ctx, W = this.W, H = this.H;
     if (!ctx || !W) return;
     var red = this.reduced;
-    var t = red ? 1e6 : now - this.t0;
+    var t = red ? 1e6 + (now - this.t0) : now - this.t0;
     var dt = Math.min(0.05, ((now - (this.last || now)) / 1000));
     this.last = now;
+
+    // night: hills and sunset sink away, the sky dims to deep blue
+    var dk = dt / (red ? 0.01 : 1.8);
+    this.K = this.Ktarget > this.K ? Math.min(this.Ktarget, this.K + dk) : Math.max(this.Ktarget, this.K - dk);
+    var K = this.K * this.K * (3 - 2 * this.K);
+
     ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-
     this.px += ((this.mx || 0) * -16 - this.px) * 0.05;
     this.py += ((this.my || 0) * -10 - this.py) * 0.05;
-    var px = red ? 0 : this.px, py = red ? 0 : this.py;
+    var px = red ? 0 : this.px * (1 - K), py = red ? 0 : this.py * (1 - K);
     var hz = this.hz, spr = this.spr;
 
-    // the sky
-    var S = this.stars;
+    var S = this.stars, starMul = 1 - 0.82 * K;
     for (var i = 0; i < S.length; i++) {
       var s = S[i];
       var f = Math.max(0, Math.min(1, (t - s.delay) / 900));
       if (f <= 0) continue;
       var tw = red ? 1 : (1 - s.amp + s.amp * (0.5 + 0.5 * Math.sin(t * 0.001 * s.w + s.ph)));
       var haze = Math.max(0.15, Math.min(1, (hz - s.y) / (H * 0.18)));
-      var a = s.a * f * tw * haze;
+      var a = s.a * f * tw * haze * starMul;
       if (a < 0.02) continue;
       var x = s.x + px * s.z, y = s.y + py * s.z, d = s.d;
       ctx.globalAlpha = a;
@@ -258,10 +849,9 @@ class Component extends DCLogic {
     }
     ctx.globalAlpha = 1;
 
-    // constellations
-    var self = this;
+    var self = this, conA = 1 - K;
     var drawCon = function (nodes, lines, t0, label, labelPos) {
-      if (t < t0) return 0;
+      if (t < t0 || conA <= 0.01) return;
       var nf = Math.min(1, (t - t0) / 700);
       ctx.lineCap = 'round';
       for (var k = 0; k < lines.length; k++) {
@@ -271,19 +861,19 @@ class Component extends DCLogic {
         var A = nodes[lines[k][0]], B = nodes[lines[k][1]];
         var ax = A.x + px, ay = A.y + py, bx = ax + (B.x - A.x) * pr, by = ay + (B.y - A.y) * pr;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-        ctx.strokeStyle = 'rgba(200,212,255,0.07)'; ctx.lineWidth = 4; ctx.stroke();
-        ctx.strokeStyle = 'rgba(214,224,255,0.42)'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.strokeStyle = 'rgba(200,212,255,' + (0.07 * conA) + ')'; ctx.lineWidth = 4; ctx.stroke();
+        ctx.strokeStyle = 'rgba(214,224,255,' + (0.42 * conA) + ')'; ctx.lineWidth = 1; ctx.stroke();
       }
       for (var n = 0; n < nodes.length; n++) {
         if (nodes === self.umi && n === 0) continue;
         var N = nodes[n], tw = red ? 1 : 0.85 + 0.15 * Math.sin(t * 0.0017 + n * 1.7);
         var dd = 7 + N.m * 14;
-        ctx.globalAlpha = nf * tw * (0.55 + 0.45 * N.m);
+        ctx.globalAlpha = nf * tw * (0.55 + 0.45 * N.m) * conA;
         ctx.drawImage(spr[N.c], N.x + px - dd / 2, N.y + py - dd / 2, dd, dd);
       }
       var lf = Math.max(0, Math.min(1, (t - t0 - lines.length * self.segStep) / 900));
       if (lf > 0) {
-        ctx.globalAlpha = lf * 0.6;
+        ctx.globalAlpha = lf * 0.6 * conA;
         ctx.fillStyle = '#E4E8FF';
         ctx.font = 'italic 300 19px "Cormorant Garamond", Georgia, serif';
         ctx.textAlign = 'left';
@@ -294,65 +884,26 @@ class Component extends DCLogic {
     drawCon(this.ori, this.oriL, this.tOri, 'Orion', this.oriLabel);
     drawCon(this.umi, this.umiL, this.tUmi, 'Ursa Minor', this.umiLabel);
 
-    // the north star: appears last, blinks brighter than everything
+    // Polaris in its place, until it is launched
     var P = this.umi[0], D = this.umi[1];
-    if (t >= this.tPol) {
+    if (t >= this.tPol && !this.launched) {
       var e = Math.min(1, (t - this.tPol) / 1400);
       e = 1 - Math.pow(1 - e, 3);
       var since = t - this.tPol;
       var blink = red ? 0.8 : 0.55 + 0.45 * Math.pow(0.5 + 0.5 * Math.sin(since * 0.0026 - 1.57), 4);
-      var fl = Math.exp(-Math.max(0, t - this.flareAt) / 650) * 1.4;
       var intro = Math.exp(-since / 900) * 1.2;
-      var b = e * (blink + fl + intro);
-      var x = P.x + px, y = P.y + py;
-
       var lp = Math.max(0, Math.min(1, (since - 500) / 700));
       if (lp > 0) {
-        var ax = D.x + px, ay = D.y + py;
-        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + (x - ax) * lp, ay + (y - ay) * lp);
+        var ax2 = D.x + px, ay2 = D.y + py, x2 = P.x + px, y2 = P.y + py;
+        ctx.beginPath(); ctx.moveTo(ax2, ay2); ctx.lineTo(ax2 + (x2 - ax2) * lp, ay2 + (y2 - ay2) * lp);
         ctx.strokeStyle = 'rgba(200,212,255,0.07)'; ctx.lineWidth = 4; ctx.stroke();
         ctx.strokeStyle = 'rgba(214,224,255,0.42)'; ctx.lineWidth = 1; ctx.stroke();
       }
-
-      var halo = 70 + 60 * b;
-      var hg = ctx.createRadialGradient(x, y, 0, x, y, halo);
-      hg.addColorStop(0, 'rgba(255,244,214,' + Math.min(0.5, 0.22 * b) + ')');
-      hg.addColorStop(1, 'rgba(255,244,214,0)');
-      ctx.fillStyle = hg;
-      ctx.fillRect(x - halo, y - halo, halo * 2, halo * 2);
-
-      var core = 22 + 18 * b;
-      ctx.globalAlpha = Math.min(1, 0.6 + 0.4 * b);
-      ctx.drawImage(spr.w, x - core / 2, y - core / 2, core, core);
-      ctx.drawImage(spr.w, x - core / 4, y - core / 4, core / 2, core / 2);
-
-      var spike = (34 + 46 * b), thin = 0.9 + 0.5 * b;
-      ctx.globalAlpha = Math.min(1, 0.35 + 0.4 * b);
-      var sg = ctx.createLinearGradient(x - spike, 0, x + spike, 0);
-      sg.addColorStop(0, 'rgba(255,248,230,0)'); sg.addColorStop(0.5, 'rgba(255,248,230,1)'); sg.addColorStop(1, 'rgba(255,248,230,0)');
-      ctx.fillStyle = sg;
-      ctx.fillRect(x - spike, y - thin / 2, spike * 2, thin);
-      var vg = ctx.createLinearGradient(0, y - spike, 0, y + spike);
-      vg.addColorStop(0, 'rgba(255,248,230,0)'); vg.addColorStop(0.5, 'rgba(255,248,230,1)'); vg.addColorStop(1, 'rgba(255,248,230,0)');
-      ctx.fillStyle = vg;
-      ctx.fillRect(x - thin / 2, y - spike, thin, spike * 2);
-      ctx.save();
-      ctx.translate(x, y); ctx.rotate(Math.PI / 4);
-      ctx.globalAlpha = Math.min(1, 0.18 + 0.22 * b);
-      var s2 = spike * 0.45;
-      var dg = ctx.createLinearGradient(-s2, 0, s2, 0);
-      dg.addColorStop(0, 'rgba(255,248,230,0)'); dg.addColorStop(0.5, 'rgba(255,248,230,1)'); dg.addColorStop(1, 'rgba(255,248,230,0)');
-      ctx.fillStyle = dg;
-      ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
-      ctx.rotate(Math.PI / 2);
-      ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
-      ctx.restore();
-
-      ctx.globalAlpha = 1;
+      this._drawStar(ctx, P.x + px, P.y + py, e * (blink + intro));
     }
 
-    // shooting stars
-    if (!red && t > this.tPol + 2500 && t > this.nextMeteor) {
+    // shooting stars (only before night falls)
+    if (!red && !this.launched && t > this.tPol + 2500 && t > this.nextMeteor) {
       var sx = (0.35 + Math.random() * 0.6) * W, sy = Math.random() * hz * 0.4;
       this._meteor(sx, sy, sx - 300 - Math.random() * 200, sy + 140 + Math.random() * 120);
       this.nextMeteor = t + 7000 + Math.random() * 7000;
@@ -368,47 +919,143 @@ class Component extends DCLogic {
       var fade = mt.age > mt.life ? 1 - (mt.age - mt.life) / 0.3 : Math.min(1, mt.age / 0.1);
       var mg = ctx.createLinearGradient(tx, ty, hx, hy);
       mg.addColorStop(0, 'rgba(255,255,255,0)');
-      mg.addColorStop(1, 'rgba(255,250,235,' + (0.85 * fade) + ')');
+      mg.addColorStop(1, 'rgba(255,250,235,' + (0.85 * fade * (1 - K)) + ')');
       ctx.strokeStyle = mg; ctx.lineWidth = 1.4; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(hx, hy); ctx.stroke();
     }
     this.meteors = ms;
 
-    // the horizon
-    var drawRidge = function (pts, fill) {
-      ctx.beginPath();
-      ctx.moveTo(-10, H + 10);
-      for (var r = 0; r < pts.length; r++) ctx.lineTo(pts[r][0] + px * 0.1, pts[r][1]);
-      ctx.lineTo(W + 20, H + 10);
-      ctx.closePath();
-      ctx.fillStyle = fill;
-      ctx.fill();
-    };
-    // sunset glow sitting on the hilltops
-    var gTop = hz - H * 0.26, gBot = hz + H * 0.03;
-    var gb = ctx.createLinearGradient(0, gTop, 0, gBot);
-    gb.addColorStop(0, 'rgba(190,110,160,0)');
-    gb.addColorStop(0.35, 'rgba(206,112,150,0.10)');
-    gb.addColorStop(0.65, 'rgba(232,132,110,0.24)');
-    gb.addColorStop(0.88, 'rgba(248,164,104,0.42)');
-    gb.addColorStop(1, 'rgba(255,196,128,0.55)');
-    ctx.fillStyle = gb;
-    ctx.fillRect(0, gTop, W, gBot - gTop);
-    var sx0 = W * (this.mob ? 0.3 : 0.2);
-    var sg2 = ctx.createRadialGradient(sx0, hz, 0, sx0, hz, W * 0.55);
-    sg2.addColorStop(0, 'rgba(255,178,110,0.42)');
-    sg2.addColorStop(0.4, 'rgba(240,140,110,0.16)');
-    sg2.addColorStop(1, 'rgba(240,140,110,0)');
-    ctx.fillStyle = sg2;
-    ctx.fillRect(0, hz - W * 0.55, W, W * 0.55 + H * 0.05);
-    drawRidge(this.back, 'rgba(22,22,52,0.96)');
-    drawRidge(this.front, '#06070F');
-    for (var l = 0; l < this.lights.length; l++) {
-      var lt = this.lights[l];
-      ctx.globalAlpha = 0.55 + (red ? 0 : 0.25 * Math.sin(t * 0.002 + lt.ph));
-      ctx.drawImage(spr.k, lt.x - 4, lt.y - 4, 8, 8);
+    // sunset and hills, sinking away as night falls
+    var hillA = 1 - K, sink = K * H * 0.08;
+    if (hillA > 0.01) {
+      ctx.globalAlpha = hillA;
+      var gTop = hz - H * 0.26, gBot = hz + H * 0.03;
+      var gb = ctx.createLinearGradient(0, gTop, 0, gBot);
+      gb.addColorStop(0, 'rgba(190,110,160,0)');
+      gb.addColorStop(0.35, 'rgba(206,112,150,0.10)');
+      gb.addColorStop(0.65, 'rgba(232,132,110,0.24)');
+      gb.addColorStop(0.88, 'rgba(248,164,104,0.42)');
+      gb.addColorStop(1, 'rgba(255,196,128,0.55)');
+      ctx.fillStyle = gb;
+      ctx.fillRect(0, gTop + sink, W, gBot - gTop);
+      var sx0 = W * (this.mob ? 0.3 : 0.2);
+      var sg2 = ctx.createRadialGradient(sx0, hz + sink, 0, sx0, hz + sink, W * 0.55);
+      sg2.addColorStop(0, 'rgba(255,178,110,0.42)');
+      sg2.addColorStop(0.4, 'rgba(240,140,110,0.16)');
+      sg2.addColorStop(1, 'rgba(240,140,110,0)');
+      ctx.fillStyle = sg2;
+      ctx.fillRect(0, hz - W * 0.55 + sink, W, W * 0.55 + H * 0.05);
+      var drawRidge = function (pts, fill) {
+        ctx.beginPath();
+        ctx.moveTo(-10, H + 10);
+        for (var r = 0; r < pts.length; r++) ctx.lineTo(pts[r][0] + px * 0.1, pts[r][1] + sink);
+        ctx.lineTo(W + 20, H + 10);
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+      };
+      drawRidge(this.back, '#161634');
+      drawRidge(this.front, '#06070F');
+      ctx.globalAlpha = 1;
     }
-    ctx.globalAlpha = 1;
+
+    this._fxFrame(t, dt);
+  }
+
+  // the front layer: the shooting star, its stardust and the resting north star
+  _fxFrame(t, dt) {
+    var fc = this.fctx, W = this.W, H = this.H, spr = this.spr;
+    if (!fc) return;
+    fc.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    fc.clearRect(0, 0, W, H);
+    var head = null, flying = false;
+
+    if (this.fly) {
+      var u = Math.max(0, Math.min(1, (t - this.fly.t0) / this.fly.dur));
+      if (t >= this.fly.t0) {
+        var e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+        head = this._at(this.fly.path, e);
+        flying = true;
+        this.trail.push([head[0], head[1]]);
+        if (this.trail.length > 26) this.trail.shift();
+        if (!this.reduced) {
+          var prev = this.trail.length > 1 ? this.trail[this.trail.length - 2] : head;
+          var vx = (head[0] - prev[0]) / Math.max(dt, 0.001), vy = (head[1] - prev[1]) / Math.max(dt, 0.001);
+          for (var k = 0; k < 7; k++) {
+            this.dust.push({
+              x: head[0] + (Math.random() - 0.5) * 6, y: head[1] + (Math.random() - 0.5) * 6,
+              vx: -vx * 0.04 + (Math.random() - 0.5) * 40, vy: -vy * 0.04 + (Math.random() - 0.5) * 40 + 8,
+              age: 0, life: 0.6 + Math.random() * 1.2, size: 0.5 + Math.random() * 1.8,
+              c: Math.random() < 0.4 ? 'g' : 'w', ph: Math.random() * 6.28
+            });
+          }
+        }
+        // text bursts into stardust as the star passes over it
+        if (!this.fly.home) {
+          for (var i = 0; i < 4; i++) {
+            var el = this.textEls[i];
+            if (!el || (this.state && this.state.dis && this.state.dis[i])) continue;
+            var r = this._toCanvas(el.getBoundingClientRect()), pad = 30;
+            if ((head[0] > r.x - pad && head[0] < r.x + r.w + pad && head[1] > r.y - pad && head[1] < r.y + r.h + pad) || u > 0.82) this._dissolve(i);
+          }
+          if (u > 0.8) this._dissolve(4);
+        }
+      } else {
+        // the moment before launch: Polaris flares in place
+        var P = this.umi[0];
+        head = [P.x + this.px, P.y + this.py];
+        this._drawStar(fc, head[0], head[1], 1.2 + 0.8 * Math.min(1, (t - this.flareAt) / 300));
+      }
+      if (u >= 1 && t >= this.fly.t0) {
+        var home = this.fly.home;
+        this.fly = null;
+        this.trail = [];
+        if (home) { this.launched = false; this.rest = null; }
+        else this._arrive();
+      }
+    }
+
+    // stardust
+    var alive = [];
+    for (var n = 0; n < this.dust.length; n++) {
+      var p = this.dust[n];
+      p.age += dt;
+      if (p.age > p.life) continue;
+      p.vx *= Math.pow(0.6, dt); p.vy *= Math.pow(0.6, dt);
+      p.vy -= 6 * dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      alive.push(p);
+      var lifeF = 1 - p.age / p.life;
+      var tw = 0.6 + 0.4 * Math.sin(p.ph + t * 0.012);
+      var a = Math.min(1, lifeF * 1.4) * tw;
+      var sz = p.size * 3.2;
+      fc.globalAlpha = a * 0.9;
+      fc.drawImage(spr[p.c], p.x - sz / 2, p.y - sz / 2, sz, sz);
+    }
+    this.dust = alive.length > 4000 ? alive.slice(alive.length - 4000) : alive;
+    fc.globalAlpha = 1;
+
+    // the shooting star's tail
+    if (flying && this.trail.length > 2) {
+      fc.lineCap = 'round';
+      for (var j = 1; j < this.trail.length; j++) {
+        var f = j / this.trail.length;
+        fc.beginPath();
+        fc.moveTo(this.trail[j - 1][0], this.trail[j - 1][1]);
+        fc.lineTo(this.trail[j][0], this.trail[j][1]);
+        fc.strokeStyle = 'rgba(255,246,222,' + (f * f * 0.8) + ')';
+        fc.lineWidth = 0.6 + f * 3.4;
+        fc.stroke();
+      }
+    }
+    if (flying && head) this._drawStar(fc, head[0], head[1], 1.1);
+
+    // resting north star, blinking brighter than the rest
+    if (this.launched && !this.fly && this.rest) {
+      var since = t;
+      var blink = this.reduced ? 0.8 : 0.55 + 0.45 * Math.pow(0.5 + 0.5 * Math.sin(since * 0.0026), 4);
+      this._drawStar(fc, this.rest[0], this.rest[1], blink);
+    }
   }
 }
 </script>
