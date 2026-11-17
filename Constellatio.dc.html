@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Constellatio — follow your north star</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#070B1F}
+a{color:#EEF1FF}a:hover{color:#F2DFA7}
+:focus-visible{outline:2px solid #F2DFA7;outline-offset:3px}
+.cs-hero{height:860px}
+.cs-copy{align-items:center}
+@media (max-width:859px){
+.cs-hero{height:1000px}
+.cs-copy{align-items:flex-start;padding-top:150px}
+}
+</style>
+</helmet>
+<section class="cs-hero" onMouseMove="{{onMove}}" style="position: relative; overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif; color: #EEF1FF; background: radial-gradient(ellipse 60% 30% at 18% 100%, rgba(214,128,86,0.38), rgba(214,128,86,0) 70%), linear-gradient(180deg, #060A1C 0%, #0D1440 38%, #232A6A 66%, #43407E 84%, #5E4A70 100%)">
+<canvas ref="{{canvasRef}}" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; pointer-events: none"></canvas>
+
+<header style="position: absolute; top: 0; left: 0; right: 0; z-index: 2">
+<nav aria-label="Main" style="max-width: 1200px; margin: 0 auto; padding: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px">
+<a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #EEF1FF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F2DFA7" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M12 2V22M2 12H22M5.5 5.5L18.5 18.5M18.5 5.5L5.5 18.5" stroke-opacity="0.55"></path><path d="M12 6V18M6 12H18"></path></svg>
+<span style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.04em">constellatio</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font-size: 15px">
+<a href="#top" style="text-decoration: none; padding: 10px 0">Approach</a>
+<a href="#top" style="text-decoration: none; padding: 10px 0">Work</a>
+<a href="#top" style="text-decoration: none; padding: 10px 0">Studio</a>
+<a href="#top" style="text-decoration: none; padding: 12px 20px; border: 1px solid rgba(238,241,255,0.35); border-radius: 999px">Start a project</a>
+</div>
+</nav>
+</header>
+
+<div class="cs-copy" style="position: relative; z-index: 1; max-width: 1200px; height: 100%; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex">
+<div style="max-width: 560px; display: flex; flex-direction: column; gap: 28px">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #B9C0DE">Brand strategy · Identity · Web</p>
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(48px, 6.2vw, 92px); line-height: 1; letter-spacing: -0.015em">In a constellation of brands, follow your <em style="font-style: italic; color: {{accent}}">north star.</em></h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.6; color: #D3D8F0; max-width: 480px">Every sky is crowded. Constellatio helps you find the one idea that outshines the rest— then connects the dots into a business strategy to navigate your path.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center">
+<button type="button" onClick="{{findStar}}" style="font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none; border-radius: 999px; padding: 16px 30px; min-height: 52px; background: {{accent}}; color: #0D1440">Find your north star</button>
+<a href="#top" style="font-size: 16px; font-weight: 500; text-decoration: none; padding: 15px 26px; min-height: 52px; box-sizing: border-box; border-radius: 999px; border: 1px solid rgba(238,241,255,0.35); display: inline-flex; align-items: center">See our constellations</a>
+</div>
+</div>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F2DFA7","options":["#F2DFA7","#CFE0FF","#F4B98A","#FFFFFF"]},"$preview":{"width":1440,"height":860}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    if (!this._ref) {
+      this._ref = function (el) {
+        if (el && el !== self.cv) { self._stop(); self._start(el); }
+        else if (!el) { self._stop(); self.cv = null; }
+      };
+      this._find = function () { self._flare(); };
+      this._move = function (e) {
+        var r = e.currentTarget.getBoundingClientRect();
+        if (!r.width) return;
+        self.mx = (e.clientX - r.left) / r.width - 0.5;
+        self.my = (e.clientY - r.top) / r.height - 0.5;
+      };
+    }
+    return { accent: this.props.accent ?? '#F2DFA7', canvasRef: this._ref, findStar: this._find, onMove: this._move };
+  }
+
+  componentWillUnmount() { this._stop(); this.cv = null; }
+
+  _stop() {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = 0;
+    if (this.ro) this.ro.disconnect();
+    this.ro = null;
+  }
+
+  _sprite(r, g, b) {
+    var c = document.createElement('canvas');
+    c.width = c.height = 64;
+    var x = c.getContext('2d');
+    var gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(255,255,255,1)');
+    gr.addColorStop(0.1, 'rgba(' + r + ',' + g + ',' + b + ',0.95)');
+    gr.addColorStop(0.28, 'rgba(' + r + ',' + g + ',' + b + ',0.28)');
+    gr.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)');
+    x.fillStyle = gr;
+    x.fillRect(0, 0, 64, 64);
+    return c;
+  }
+
+  _start(el) {
+    var self = this;
+    this.cv = el;
+    this.ctx = el.getContext('2d');
+    this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.t0 = performance.now();
+    this.mx = this.my = 0;
+    this.px = this.py = 0;
+    this.meteors = [];
+    this.nextMeteor = 6000;
+    this.flareAt = -1e9;
+    if (!this.spr) this.spr = { w: this._sprite(255, 255, 255), b: this._sprite(196, 212, 255), k: this._sprite(255, 214, 170) };
+    if (!this.seed) {
+      this.seed = [];
+      for (var i = 0; i < 12; i++) this.seed.push(Math.random() * 6.283);
+    }
+    this._resize();
+    if (window.ResizeObserver) {
+      this.ro = new ResizeObserver(function () { self._resize(); });
+      this.ro.observe(el);
+    }
+    var loop = function (now) {
+      if (!self.cv) return;
+      self._frame(now);
+      self.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+
+  _resize() {
+    var el = this.cv;
+    if (!el) return;
+    var W = Math.max(1, el.clientWidth), H = Math.max(1, el.clientHeight);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    el.width = Math.round(W * dpr);
+    el.height = Math.round(H * dpr);
+    this.W = W; this.H = H; this.dpr = dpr;
+    var mob = W < 860;
+    this.mob = mob;
+    var hz = H * (mob ? 0.88 : 0.8);
+    this.hz = hz;
+
+    // star field: a scatter plus a faint milky band
+    var N = Math.min(2400, Math.round(W * H / 800));
+    var stars = [];
+    for (var i = 0; i < N; i++) {
+      var x, y;
+      if (i % 3 === 0) {
+        var u = Math.random();
+        var g = (Math.random() + Math.random() + Math.random() - 1.5) * 0.11;
+        x = (0.05 + u * 0.95 + g * 0.6) * W;
+        y = (1 - u) * hz * 1.05 - g * H;
+      } else {
+        x = Math.random() * W;
+        y = Math.random() * hz * 1.02;
+      }
+      var m = Math.pow(Math.random(), 3.4);
+      var tr = Math.random();
+      stars.push({
+        x: x, y: y, m: m,
+        d: 2 + m * 10,
+        a: 0.16 + 0.84 * Math.pow(m, 0.6),
+        c: tr < 0.16 ? 'b' : tr < 0.26 ? 'k' : 'w',
+        w: 0.5 + Math.random() * 2.6,
+        ph: Math.random() * 6.283,
+        amp: 0.15 + Math.random() * 0.45,
+        delay: Math.random() * 2200,
+        z: 0.25 + m * 0.75
+      });
+    }
+    this.stars = stars;
+
+    // constellations
+    var ori = [[0.15, 0.12, 'k', 1], [0.62, 0.2, 'b', 0.8], [0.4, 0, 'b', 0.6], [0.36, 0.52, 'b', 0.75], [0.43, 0.48, 'b', 0.8], [0.5, 0.44, 'b', 0.72], [0.28, 0.88, 'b', 0.7], [0.7, 0.82, 'b', 1], [0.84, 0.06, 'w', 0.5], [0.88, 0.18, 'w', 0.55], [0.87, 0.31, 'w', 0.5]];
+    var oriL = [[2, 0], [2, 1], [0, 3], [1, 5], [3, 4], [4, 5], [3, 6], [5, 7], [1, 9], [8, 9], [9, 10]];
+    var umi = [[0, 0, 'w', 1], [0.12, 0.18, 'w', 0.5], [0.2, 0.36, 'w', 0.5], [0.24, 0.55, 'w', 0.55], [0.4, 0.62, 'w', 0.5], [0.46, 0.82, 'w', 0.7], [0.3, 0.78, 'k', 0.85]];
+    var umiL = [[6, 5], [5, 4], [4, 3], [3, 6], [3, 2], [2, 1]];
+    var oo, os, po, ps;
+    if (mob) { oo = [0.1 * W, 0.58 * H]; os = Math.min(0.26 * H, 0.62 * W); po = [0.86 * W, 0.54 * H]; ps = 0.16 * H; }
+    else { oo = [0.53 * W, 0.33 * H]; os = Math.min(0.46 * H, 0.26 * W); po = [0.86 * W, 0.15 * H]; ps = 0.3 * H; }
+    this.ori = ori.map(function (s) { return { x: oo[0] + s[0] * os * 0.85, y: oo[1] + s[1] * os, c: s[2], m: s[3] }; });
+    this.umi = umi.map(function (s) { return { x: po[0] - s[0] * ps, y: po[1] + s[1] * ps, c: s[2], m: s[3] }; });
+    this.oriL = oriL;
+    this.umiL = umiL;
+    this.oriLabel = [oo[0] - 6, oo[1] - 22];
+    this.umiLabel = [po[0] - 0.46 * ps, po[1] + 0.82 * ps + 30];
+
+    // timeline
+    var segStep = 260, segDur = 420;
+    this.tOri = 2000;
+    this.tUmi = this.tOri + oriL.length * segStep + segDur + 300;
+    this.tPol = this.tUmi + umiL.length * segStep + segDur + 600;
+    this.segStep = segStep; this.segDur = segDur;
+
+    // mountain ridges
+    var sd = this.seed, back = [], front = [], lights = [];
+    for (var X = -8; X <= W + 16; X += 8) {
+      var q = X / W;
+      back.push([X, hz - H * 0.035 - H * 0.05 * (0.5 + 0.5 * Math.sin(q * 5.1 + sd[0])) - H * 0.025 * Math.sin(q * 13.7 + sd[1]) - H * 0.01 * Math.sin(q * 31 + sd[2])]);
+      front.push([X, hz + H * 0.025 - H * 0.04 * (0.5 + 0.5 * Math.sin(q * 3.3 + sd[3])) - H * 0.018 * Math.sin(q * 17.9 + sd[4]) - H * 0.007 * Math.sin(q * 47 + sd[5])]);
+    }
+    for (var L = 0; L < 14; L++) {
+      var fx = (0.15 + Math.random() * 0.8) * W;
+      var idx = Math.max(0, Math.min(front.length - 1, Math.round((fx + 8) / 8)));
+      lights.push({ x: fx, y: front[idx][1] + 6 + Math.random() * H * 0.05, ph: Math.random() * 6.283 });
+    }
+    this.back = back; this.front = front; this.lights = lights;
+  }
+
+  _flare() {
+    if (!this.cv) return;
+    var t = performance.now() - this.t0;
+    if (t < this.tPol) { this.t0 -= (this.tPol - t); t = this.tPol; }
+    this.flareAt = t;
+    var p = this.umi[0];
+    this._meteor(p.x + 380, p.y - 140, p.x + 30, p.y - 10);
+  }
+
+  _meteor(x0, y0, x1, y1) {
+    var dx = x1 - x0, dy = y1 - y0, l = Math.hypot(dx, dy) || 1;
+    this.meteors.push({ x: x0, y: y0, vx: dx / l * 950, vy: dy / l * 950, life: l / 950, age: 0 });
+  }
+
+  _frame(now) {
+    var ctx = this.ctx, W = this.W, H = this.H;
+    if (!ctx || !W) return;
+    var red = this.reduced;
+    var t = red ? 1e6 : now - this.t0;
+    var dt = Math.min(0.05, ((now - (this.last || now)) / 1000));
+    this.last = now;
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    this.px += ((this.mx || 0) * -16 - this.px) * 0.05;
+    this.py += ((this.my || 0) * -10 - this.py) * 0.05;
+    var px = red ? 0 : this.px, py = red ? 0 : this.py;
+    var hz = this.hz, spr = this.spr;
+
+    // the sky
+    var S = this.stars;
+    for (var i = 0; i < S.length; i++) {
+      var s = S[i];
+      var f = Math.max(0, Math.min(1, (t - s.delay) / 900));
+      if (f <= 0) continue;
+      var tw = red ? 1 : (1 - s.amp + s.amp * (0.5 + 0.5 * Math.sin(t * 0.001 * s.w + s.ph)));
+      var haze = Math.max(0.15, Math.min(1, (hz - s.y) / (H * 0.18)));
+      var a = s.a * f * tw * haze;
+      if (a < 0.02) continue;
+      var x = s.x + px * s.z, y = s.y + py * s.z, d = s.d;
+      ctx.globalAlpha = a;
+      ctx.drawImage(spr[s.c], x - d / 2, y - d / 2, d, d);
+      if (s.m > 0.55) {
+        ctx.globalAlpha = a * 0.45;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(x - d * 0.9, y - 0.35, d * 1.8, 0.7);
+        ctx.fillRect(x - 0.35, y - d * 0.9, 0.7, d * 1.8);
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // constellations
+    var self = this;
+    var drawCon = function (nodes, lines, t0, label, labelPos) {
+      if (t < t0) return 0;
+      var nf = Math.min(1, (t - t0) / 700);
+      ctx.lineCap = 'round';
+      for (var k = 0; k < lines.length; k++) {
+        var pr = Math.max(0, Math.min(1, (t - t0 - k * self.segStep) / self.segDur));
+        if (pr <= 0) continue;
+        pr = 1 - Math.pow(1 - pr, 2);
+        var A = nodes[lines[k][0]], B = nodes[lines[k][1]];
+        var ax = A.x + px, ay = A.y + py, bx = ax + (B.x - A.x) * pr, by = ay + (B.y - A.y) * pr;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+        ctx.strokeStyle = 'rgba(200,212,255,0.07)'; ctx.lineWidth = 4; ctx.stroke();
+        ctx.strokeStyle = 'rgba(214,224,255,0.42)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      for (var n = 0; n < nodes.length; n++) {
+        if (nodes === self.umi && n === 0) continue;
+        var N = nodes[n], tw = red ? 1 : 0.85 + 0.15 * Math.sin(t * 0.0017 + n * 1.7);
+        var dd = 7 + N.m * 14;
+        ctx.globalAlpha = nf * tw * (0.55 + 0.45 * N.m);
+        ctx.drawImage(spr[N.c], N.x + px - dd / 2, N.y + py - dd / 2, dd, dd);
+      }
+      var lf = Math.max(0, Math.min(1, (t - t0 - lines.length * self.segStep) / 900));
+      if (lf > 0) {
+        ctx.globalAlpha = lf * 0.6;
+        ctx.fillStyle = '#E4E8FF';
+        ctx.font = 'italic 300 19px "Cormorant Garamond", Georgia, serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(label, labelPos[0] + px, labelPos[1] + py);
+      }
+      ctx.globalAlpha = 1;
+    };
+    drawCon(this.ori, this.oriL, this.tOri, 'Orion', this.oriLabel);
+    drawCon(this.umi, this.umiL, this.tUmi, 'Ursa Minor', this.umiLabel);
+
+    // the north star: appears last, blinks brighter than everything
+    var P = this.umi[0], D = this.umi[1];
+    if (t >= this.tPol) {
+      var e = Math.min(1, (t - this.tPol) / 1400);
+      e = 1 - Math.pow(1 - e, 3);
+      var since = t - this.tPol;
+      var blink = red ? 0.8 : 0.55 + 0.45 * Math.pow(0.5 + 0.5 * Math.sin(since * 0.0026 - 1.57), 4);
+      var fl = Math.exp(-Math.max(0, t - this.flareAt) / 650) * 1.4;
+      var intro = Math.exp(-since / 900) * 1.2;
+      var b = e * (blink + fl + intro);
+      var x = P.x + px, y = P.y + py;
+
+      var lp = Math.max(0, Math.min(1, (since - 500) / 700));
+      if (lp > 0) {
+        var ax = D.x + px, ay = D.y + py;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + (x - ax) * lp, ay + (y - ay) * lp);
+        ctx.strokeStyle = 'rgba(200,212,255,0.07)'; ctx.lineWidth = 4; ctx.stroke();
+        ctx.strokeStyle = 'rgba(214,224,255,0.42)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+
+      var halo = 70 + 60 * b;
+      var hg = ctx.createRadialGradient(x, y, 0, x, y, halo);
+      hg.addColorStop(0, 'rgba(255,244,214,' + Math.min(0.5, 0.22 * b) + ')');
+      hg.addColorStop(1, 'rgba(255,244,214,0)');
+      ctx.fillStyle = hg;
+      ctx.fillRect(x - halo, y - halo, halo * 2, halo * 2);
+
+      var core = 22 + 18 * b;
+      ctx.globalAlpha = Math.min(1, 0.6 + 0.4 * b);
+      ctx.drawImage(spr.w, x - core / 2, y - core / 2, core, core);
+      ctx.drawImage(spr.w, x - core / 4, y - core / 4, core / 2, core / 2);
+
+      var spike = (34 + 46 * b), thin = 0.9 + 0.5 * b;
+      ctx.globalAlpha = Math.min(1, 0.35 + 0.4 * b);
+      var sg = ctx.createLinearGradient(x - spike, 0, x + spike, 0);
+      sg.addColorStop(0, 'rgba(255,248,230,0)'); sg.addColorStop(0.5, 'rgba(255,248,230,1)'); sg.addColorStop(1, 'rgba(255,248,230,0)');
+      ctx.fillStyle = sg;
+      ctx.fillRect(x - spike, y - thin / 2, spike * 2, thin);
+      var vg = ctx.createLinearGradient(0, y - spike, 0, y + spike);
+      vg.addColorStop(0, 'rgba(255,248,230,0)'); vg.addColorStop(0.5, 'rgba(255,248,230,1)'); vg.addColorStop(1, 'rgba(255,248,230,0)');
+      ctx.fillStyle = vg;
+      ctx.fillRect(x - thin / 2, y - spike, thin, spike * 2);
+      ctx.save();
+      ctx.translate(x, y); ctx.rotate(Math.PI / 4);
+      ctx.globalAlpha = Math.min(1, 0.18 + 0.22 * b);
+      var s2 = spike * 0.45;
+      var dg = ctx.createLinearGradient(-s2, 0, s2, 0);
+      dg.addColorStop(0, 'rgba(255,248,230,0)'); dg.addColorStop(0.5, 'rgba(255,248,230,1)'); dg.addColorStop(1, 'rgba(255,248,230,0)');
+      ctx.fillStyle = dg;
+      ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillRect(-s2, -0.4, s2 * 2, 0.8);
+      ctx.restore();
+
+      ctx.globalAlpha = 1;
+    }
+
+    // shooting stars
+    if (!red && t > this.tPol + 2500 && t > this.nextMeteor) {
+      var sx = (0.35 + Math.random() * 0.6) * W, sy = Math.random() * hz * 0.4;
+      this._meteor(sx, sy, sx - 300 - Math.random() * 200, sy + 140 + Math.random() * 120);
+      this.nextMeteor = t + 7000 + Math.random() * 7000;
+    }
+    var ms = [];
+    for (var j = 0; j < this.meteors.length; j++) {
+      var mt = this.meteors[j];
+      mt.age += dt;
+      if (mt.age > mt.life + 0.3) continue;
+      ms.push(mt);
+      var hx = mt.x + mt.vx * Math.min(mt.age, mt.life), hy = mt.y + mt.vy * Math.min(mt.age, mt.life);
+      var tx = hx - mt.vx * 0.13, ty = hy - mt.vy * 0.13;
+      var fade = mt.age > mt.life ? 1 - (mt.age - mt.life) / 0.3 : Math.min(1, mt.age / 0.1);
+      var mg = ctx.createLinearGradient(tx, ty, hx, hy);
+      mg.addColorStop(0, 'rgba(255,255,255,0)');
+      mg.addColorStop(1, 'rgba(255,250,235,' + (0.85 * fade) + ')');
+      ctx.strokeStyle = mg; ctx.lineWidth = 1.4; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(hx, hy); ctx.stroke();
+    }
+    this.meteors = ms;
+
+    // the horizon
+    var drawRidge = function (pts, fill) {
+      ctx.beginPath();
+      ctx.moveTo(-10, H + 10);
+      for (var r = 0; r < pts.length; r++) ctx.lineTo(pts[r][0] + px * 0.1, pts[r][1]);
+      ctx.lineTo(W + 20, H + 10);
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+    };
+    // sunset glow sitting on the hilltops
+    var gTop = hz - H * 0.26, gBot = hz + H * 0.03;
+    var gb = ctx.createLinearGradient(0, gTop, 0, gBot);
+    gb.addColorStop(0, 'rgba(190,110,160,0)');
+    gb.addColorStop(0.35, 'rgba(206,112,150,0.10)');
+    gb.addColorStop(0.65, 'rgba(232,132,110,0.24)');
+    gb.addColorStop(0.88, 'rgba(248,164,104,0.42)');
+    gb.addColorStop(1, 'rgba(255,196,128,0.55)');
+    ctx.fillStyle = gb;
+    ctx.fillRect(0, gTop, W, gBot - gTop);
+    var sx0 = W * (this.mob ? 0.3 : 0.2);
+    var sg2 = ctx.createRadialGradient(sx0, hz, 0, sx0, hz, W * 0.55);
+    sg2.addColorStop(0, 'rgba(255,178,110,0.42)');
+    sg2.addColorStop(0.4, 'rgba(240,140,110,0.16)');
+    sg2.addColorStop(1, 'rgba(240,140,110,0)');
+    ctx.fillStyle = sg2;
+    ctx.fillRect(0, hz - W * 0.55, W, W * 0.55 + H * 0.05);
+    drawRidge(this.back, 'rgba(22,22,52,0.96)');
+    drawRidge(this.front, '#06070F');
+    for (var l = 0; l < this.lights.length; l++) {
+      var lt = this.lights[l];
+      ctx.globalAlpha = 0.55 + (red ? 0 : 0.25 * Math.sin(t * 0.002 + lt.ph));
+      ctx.drawImage(spr.k, lt.x - 4, lt.y - 4, 8, 8);
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+</script>
+</body>
+</html>
